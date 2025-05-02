@@ -1,6 +1,7 @@
 package org.insa.graphs.algorithm.shortestpath;
 
 import org.insa.graphs.model.Arc;
+import java.lang.Comparable ;
 
 public class Label {
 
@@ -24,6 +25,19 @@ public class Label {
 
     public double getCost() {
         return this.getCoutRealise() ;
+    }
+
+    public int compareTo(Label label) {
+        double diff = this.getCost()-label.getCost() ;
+        if(diff == 0) {
+            return 0;
+        }
+        else if(diff > 0){
+            return -1 ;
+        }
+        else {
+            return 1 ;
+        }
     }
 }
 
