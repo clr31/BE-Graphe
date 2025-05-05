@@ -22,6 +22,10 @@ public class Label implements Comparable<Label> {
     public Arc getPere(){ return this.pere; } 
 
 
+    public void setMarque(boolean Marque){ this.marque = Marque; } 
+    public void setCout(double Cout){ this.coutRealise = Cout; }
+    public void setPere(Arc Pere){ this.pere = Pere; } 
+
     public double getCost() {
         return this.getCoutRealise() ;
     }
