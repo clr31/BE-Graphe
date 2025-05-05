@@ -1,8 +1,9 @@
 package org.insa.graphs.algorithm.shortestpath;
 
 import java.util.ArrayList ;
-import java.util.Arrays;
+import java.util.Collections ;
 
+import org.insa.graphs.algorithm.AbstractSolution.Status;
 import org.insa.graphs.algorithm.utils.BinaryHeap;
 import org.insa.graphs.model.Arc;
 import org.insa.graphs.model.Graph;
@@ -66,6 +67,20 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
                     }
                 }
             }
+        }
+        if(labels[data.getDestination().getId()].getPere()==null) {
+            solution = new ShortestPathSolution(data,Status.INFEASIBLE) ;
+        }
+        else {
+            notifyDestinationReached(data.getDestination()) ;
+            ArrayList<Arc> arcs = new ArrayList<>() ;
+            Arc pere = labels[data.getDestination().getId()].getPere() ;
+            while(pere!=null) {
+                arcs.add(pere) ;
+                pere = labels[pere.getDestination().getId()].getPere() ;
+            }
+            Collections.reverse(arcs) ;
+            solution = new ShortestPathSolution(data,Status.OPTIMAL,new Path(graph,arcs)) ;
         }
         
 
