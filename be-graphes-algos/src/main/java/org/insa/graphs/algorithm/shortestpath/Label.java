@@ -10,11 +10,11 @@ public class Label implements Comparable<Label> {
     private double coutRealise ; //valeur courante du plus court chemin depuis l'origine vers le sommet
     private Arc pere ; //sommet précédent sur le chemin correspondant au plus court chemin
 
-    public Label(Node sommetCourant, boolean marque, double coutRealise, Arc pere) {
+    public Label(Node sommetCourant) {
         this.sommetCourant = sommetCourant ;
-        this.marque = marque ;
-        this.coutRealise = coutRealise ;
-        this.pere = pere ;
+        this.marque = false ;
+        this.coutRealise = Double.POSITIVE_INFINITY ;
+        this.pere = null ;
     }
 
     public Node getSommetCourant(){ return this.sommetCourant; } 

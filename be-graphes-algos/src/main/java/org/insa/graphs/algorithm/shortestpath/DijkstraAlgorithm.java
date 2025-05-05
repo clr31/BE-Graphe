@@ -10,7 +10,10 @@ import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Node;
 import org.insa.graphs.model.Path;
 
+
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
+
+    protected Label[] labels;
 
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
@@ -18,6 +21,8 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     @Override
     protected ShortestPathSolution doRun() {
+
+        System.out.println("start\n") ;
 
         // retrieve data from the input problem (getInputData() is inherited from the
         // parent class ShortestPathAlgorithm)
@@ -27,17 +32,16 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         final int nbNodes = graph.size();
 
         // Initialize array of distances.
-        Label[] labels = new Label[nbNodes];
+        labels = new Label[nbNodes];
         for(int i=0; i<nbNodes; i++) {
-            labels[i].setCout(Double.POSITIVE_INFINITY) ;
-            labels[i].setMarque(false) ;
-            labels[i].setPere(null) ;
+            labels[i] = new Label(graph.get(i)) ;
         }
 
         Node origin = data.getOrigin() ;
         labels[origin.getId()].setCout(0) ;
+        System.out.println("cout origine" + labels[origin.getId()].getCost()) ;
 
-        BinaryHeap<Label> tas = new BinaryHeap<Label>();
+        BinaryHeap<Label> tas = new BinaryHeap<>();
         tas.insert(labels[origin.getId()]) ;
 
 
@@ -45,8 +49,10 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         ShortestPathSolution solution = null;
 
         // TODO: implement the Dijkstra algorithm
+        System.out.println("dans while\n") ;
         while(!tas.isEmpty()){
             Label min = tas.deleteMin() ;
+            notifyNodeMarked(min.getSommetCourant());
             min.setMarque(true) ;
             for(Arc a : min.getSommetCourant().getSuccessors()) {
                 Label labelY = labels[a.getDestination().getId()] ;
