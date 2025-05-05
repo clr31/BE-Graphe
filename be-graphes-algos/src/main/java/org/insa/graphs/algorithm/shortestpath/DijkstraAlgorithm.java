@@ -44,17 +44,25 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         ShortestPathSolution solution = null;
 
         // TODO: implement the Dijkstra algorithm
-        while(){
+        while(!tas.isEmpty()){
             Label min = tas.deleteMin() ;
             min.setMarque(true) ;
             for(Arc a : min.getSommetCourant().getSuccessors()) {
                 Label labelY = labels[a.getDestination().getId()] ;
                 if(!labelY.getMarque()) {
+                    double oldCost = labelY.getCost() ;
                     double newCost = min.getCost() + data.getCost(a) ;
-                    if(labelY.getCost() > newCost) {
+                    if( oldCost > newCost) {
                         labels[a.getDestination().getId()].setCout(newCost) ;
-                        tas.insert(labels[a.getDestination().getId()]) ;
                         labels[a.getDestination().getId()].setPere(a) ;
+                        if(Double.isInfinite(oldCost)) {
+                            tas.insert(labels[a.getDestination().getId()]) ;
+                            notifyNodeReached(a.getDestination()) ;
+                        }
+                        else {
+                            tas.remove(labels[a.getDestination().getId()]) ;
+                            tas.insert(labels[a.getDestination().getId()]) ;
+                        }
                     }
                 }
             }
