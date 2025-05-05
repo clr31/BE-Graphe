@@ -1,6 +1,11 @@
 package org.insa.graphs.algorithm.shortestpath;
 
+import java.util.ArrayList ;
+
 public class DijkstraAlgorithm extends ShortestPathAlgorithm {
+
+    //ajout d'un tableau de label indicé par le numéro du noeud
+    private ArrayList<Label> labels ;
 
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
