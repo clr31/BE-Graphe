@@ -1,9 +1,8 @@
 package org.insa.graphs.algorithm.shortestpath;
 
 import org.insa.graphs.model.Arc;
-import java.lang.Comparable ;
 
-public class Label {
+public class Label implements Comparable<Label> {
 
     private int sommetCourant ; //sommet associé au label
     private boolean marque ; //vrai lorsque coût min de ce sommet est définitivement connu par l'algorithme
