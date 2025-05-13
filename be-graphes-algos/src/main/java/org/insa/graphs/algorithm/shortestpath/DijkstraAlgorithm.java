@@ -49,47 +49,69 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         ShortestPathSolution solution = null;
 
         // TODO: implement the Dijkstra algorithm
-        System.out.println("dans while\n") ;
-        while(!tas.isEmpty()){
+        while(!tas.isEmpty()){ //ou dest trouvee
+            System.out.println("dans while\n") ;
             Label min = tas.deleteMin() ;
             notifyNodeMarked(min.getSommetCourant());
             min.setMarque(true) ;
+
             for(Arc a : min.getSommetCourant().getSuccessors()) {
-                Label labelY = labels[a.getDestination().getId()] ;
-                if(!labelY.getMarque()) {
-                    double oldCost = labelY.getCost() ;
-                    double newCost = min.getCost() + data.getCost(a) ;
-                    if( oldCost > newCost) {
-                        labels[a.getDestination().getId()].setCout(newCost) ;
-                        labels[a.getDestination().getId()].setPere(a) ;
-                        if(Double.isInfinite(oldCost)) {
-                            tas.insert(labels[a.getDestination().getId()]) ;
-                            notifyNodeReached(a.getDestination()) ;
-                        }
-                        else {
-                            tas.remove(labels[a.getDestination().getId()]) ;
-                            tas.insert(labels[a.getDestination().getId()]) ;
-                        }
+
+                if(!data.isAllowed(a)){
+                    continue ;
+                }
+                
+                int destArc = a.getDestination().getId() ;
+                Label labelY = labels[destArc] ;
+
+                if(labelY.getMarque())
+                    continue;
+
+                double oldCost = labelY.getCost() ;
+                double newCost = min.getCost() + data.getCost(a) ;
+
+                if(Double.isInfinite(oldCost) && Double.isFinite(newCost)) {
+                    notifyNodeReached(a.getDestination()) ;
+                }
+                if(oldCost > newCost) {
+
+                    if (Double.isFinite(oldCost)) {
+                        tas.remove(labels[destArc]) ;
                     }
+
+                    labels[destArc].setCout(newCost) ;
+                    labels[destArc].setPere(a) ;
+
+                    tas.insert(labels[destArc]) ;
                 }
             }
         }
+
+        System.out.println("fini while\n") ;
         if(labels[data.getDestination().getId()].getPere()==null) {
+            System.out.println("debut if\n") ;
             solution = new ShortestPathSolution(data,Status.INFEASIBLE) ;
+            System.out.println("pas de solution\n") ;
         }
         else {
+            System.out.println("debut else\n") ;
             notifyDestinationReached(data.getDestination()) ;
             ArrayList<Arc> arcs = new ArrayList<>() ;
             Arc pere = labels[data.getDestination().getId()].getPere() ;
+
             while(pere!=null) {
+                System.out.println("dans while pere\n") ;
                 arcs.add(pere) ;
-                pere = labels[pere.getDestination().getId()].getPere() ;
+                pere = labels[pere.getOrigin().getId()].getPere() ;
             }
+            
+            System.out.println("fin while pere\n") ;
             Collections.reverse(arcs) ;
             solution = new ShortestPathSolution(data,Status.OPTIMAL,new Path(graph,arcs)) ;
+            System.out.println("solution ok\n") ;
         }
         
-
+        System.out.println("fin retourne path\n") ;
         // when the algorithm terminates, return the solution that has been found
         return solution;
     }
