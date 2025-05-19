@@ -31,12 +31,12 @@ public class Label implements Comparable<Label> {
         return this.getCoutRealise() ;
     }
 
-    /*public double getTotalCost() {
-        return ???
-    }*/
+    public double getTotalCost() {
+        return this.getCoutRealise() ;
+    }
 
     public int compareTo(Label label) {
-        double diff = this.getCost()-label.getCost() ;
+        double diff = this.getTotalCost()-label.getTotalCost() ;
         if(diff == 0) {
             return 0;
         }
