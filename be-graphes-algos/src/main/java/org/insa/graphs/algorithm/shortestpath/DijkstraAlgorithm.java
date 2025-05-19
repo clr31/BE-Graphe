@@ -22,8 +22,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
     @Override
     protected ShortestPathSolution doRun() {
 
-        System.out.println("start\n") ;
-
         // retrieve data from the input problem (getInputData() is inherited from the
         // parent class ShortestPathAlgorithm)
         final ShortestPathData data = getInputData();
@@ -39,7 +37,6 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
         Node origin = data.getOrigin() ;
         labels[origin.getId()].setCout(0) ;
-        System.out.println("cout origine" + labels[origin.getId()].getCost()) ;
 
         BinaryHeap<Label> tas = new BinaryHeap<>();
         tas.insert(labels[origin.getId()]) ;
@@ -110,10 +107,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
             //System.out.println("fin while pere\n") ;
             Collections.reverse(arcs) ;
             solution = new ShortestPathSolution(data,Status.OPTIMAL,new Path(graph,arcs)) ;
-            System.out.println("solution ok\n") ;
+            System.out.println("Dijkstra solution ok\n") ;
         }
         
-        System.out.println("fin retourne path\n") ;
         // when the algorithm terminates, return the solution that has been found
         return solution;
     }

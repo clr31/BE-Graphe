@@ -13,10 +13,19 @@ import org.insa.graphs.gui.drawing.Drawing;
 import org.insa.graphs.gui.drawing.components.BasicDrawing;
 import org.insa.graphs.model.Graph;
 import org.insa.graphs.model.Path;
+import org.insa.graphs.model.Node;
 import org.insa.graphs.model.io.BinaryGraphReader;
 import org.insa.graphs.model.io.BinaryPathReader;
 import org.insa.graphs.model.io.GraphReader;
 import org.insa.graphs.model.io.PathReader;
+import org.insa.graphs.algorithm.shortestpath.ShortestPathSolution;
+import org.insa.graphs.algorithm.shortestpath.DijkstraAlgorithm;
+import org.insa.graphs.algorithm.shortestpath.AStarAlgorithm;
+import org.insa.graphs.algorithm.shortestpath.BellmanFordAlgorithm;
+import org.insa.graphs.algorithm.shortestpath.ShortestPathData;
+import org.insa.graphs.algorithm.ArcInspectorFactory ;
+
+import java.util.List;
 
 public class Launch {
 
@@ -46,37 +55,74 @@ public class Launch {
     public static void main(String[] args) throws Exception {
 
         // visit these directory to see the list of available files on commetud.
-        final String mapName =
+        final String mapINSA =
                 "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
         final String pathName =
                 "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31insa_rangueil_r2.path";
+        final String mapMidi = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/midi-pyrenees.mapgr" ;
+        final String mapTLS = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/toulouse.mapgr" ;
+        final String mapMad = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/madagascar.mapgr" ;
+        final String mapBord = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/bordeaux.mapgr" ;
 
+
+
+        //test 1 dijkstra mode voiture en distance toulouse
         final Graph graph;
-        final Path path;
-
-        // create a graph reader
+        int mode = 2 ;
+        //String map = mapTLS ;
+        String map = mapBord ;
         try (final GraphReader reader = new BinaryGraphReader(new DataInputStream(
-                new BufferedInputStream(new FileInputStream(mapName))))) {
-
-            // TODO: read the graph
+                new BufferedInputStream(new FileInputStream(map))))) {
             graph = reader.read();
         }
-
-        // create the drawing
         final Drawing drawing = createDrawing();
-
-        // TODO: draw the graph on the drawing
         drawing.drawGraph(graph) ;
 
-        // TODO: create a path reader
-        try (final PathReader pathReader = new BinaryPathReader(new DataInputStream(new BufferedInputStream(new FileInputStream(pathName))))) {
 
-            // TODO: read the path
-            path = pathReader.readPath(graph);
+        Path pathB, pathD;
+        ShortestPathData data ;
+        final ArcInspectorFactory Ainspect = new ArcInspectorFactory() ;
+        //data = new ShortestPathData(graph, graph.get(5889), graph.get(5660), Ainspect.getAllFilters().get(mode)) ;
+        data = new ShortestPathData(graph, graph.get(3067), graph.get(3625), Ainspect.getAllFilters().get(mode)) ;
+        DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(data) ;
+        pathD = dijkstra.run().getPath() ;
+        drawing.drawPath(pathD) ;
+        BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data) ;
+        pathB = bellman.run().getPath() ;
+        drawing.drawPath(pathB) ;
+        test(mode, pathB, pathD) ;
+    }
+
+    static void test(int mode, Path pathB, Path pathD) {
+        
+        if(mode==0 || mode==1) {
+            //distance
+            float distB, distD ;
+            distB = pathB.getLength() ;
+            System.out.println("distance Bellman : " + distB) ;
+            distD = pathD.getLength() ;
+            System.out.println("distance Dijkstra : " + distD) ;
+            if(distB - distD < 0.01) {
+                System.out.println("Test distance ok\n") ;
+            }
+            else {
+                System.out.println("Test distance invalide\n") ;
+            }
         }
-
-        // TODO: draw the path on the drawing
-        drawing.drawPath(path) ;
+        else {
+            //temps
+            double timeB, timeD ;
+            timeB = pathB.getMinimumTravelTime() ;
+            System.out.println("temps Bellman : " + timeB) ;
+            timeD = pathD.getMinimumTravelTime() ;
+            System.out.println("temps Dijkstra : " + timeD) ;
+            if(timeB - timeD < 0.01) {
+                System.out.println("Test temps ok\n") ;
+            }
+            else {
+                System.out.println("Test temps invalide\n") ;
+            }
+        }
     }
 
 }

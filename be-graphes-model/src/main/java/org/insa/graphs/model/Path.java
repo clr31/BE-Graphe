@@ -247,7 +247,6 @@ public class Path {
      * Compute the length of this path (in meters).
      *
      * @return Total length of the path (in meters).
-     * @deprecated Need to be implemented.
      */
     public float getLength() {
         float length = 0 ;
@@ -263,7 +262,6 @@ public class Path {
      * @param speed Speed to compute the travel time.
      * @return Time (in seconds) required to travel this path at the given speed (in
      *         kilometers-per-hour).
-     * @deprecated Need to be implemented.
      */
     public double getTravelTime(double speed) {
         double time = 0 ;
@@ -278,7 +276,6 @@ public class Path {
      * every arc.
      *
      * @return Minimum travel time to travel this path (in seconds).
-     * @deprecated Need to be implemented.
      */
     public double getMinimumTravelTime() {
         double time = 0 ;
