@@ -12,6 +12,7 @@ import org.insa.graphs.model.Path;
 
 public class AStarAlgorithm extends DijkstraAlgorithm {
 
+    protected LabelStar[] labels ; 
 
     public AStarAlgorithm(ShortestPathData data) {
         super(data);
