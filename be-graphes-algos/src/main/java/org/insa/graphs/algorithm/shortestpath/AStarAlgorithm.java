@@ -20,7 +20,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
     @Override
     protected ShortestPathSolution doRun() {
 
-        System.out.println("start\n") ;
+        System.out.println("start *\n") ;
 
         // retrieve data from the input problem (getInputData() is inherited from the
         // parent class ShortestPathAlgorithm)
@@ -30,9 +30,9 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
         final int nbNodes = graph.size();
 
         // Initialize array of distances.
-        labels = new Label[nbNodes];
+        labels = new LabelStar[nbNodes];
         for(int i=0; i<nbNodes; i++) {
-            labels[i] = new Label(graph.get(i)) ;
+            labels[i] = new LabelStar(graph.get(i),data.getDestination()) ;
         }
 
         Node origin = data.getOrigin() ;
