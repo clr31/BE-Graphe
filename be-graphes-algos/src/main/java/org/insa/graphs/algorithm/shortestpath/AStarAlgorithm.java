@@ -33,7 +33,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
         // Initialize array of distances.
         labels = new LabelStar[nbNodes];
         for(int i=0; i<nbNodes; i++) {
-            labels[i] = new LabelStar(graph.get(i),data.getDestination()) ;
+            labels[i] = new LabelStar(graph.get(i),data.getDestination(), data.getMode()) ;
         }
 
         Node origin = data.getOrigin() ;
