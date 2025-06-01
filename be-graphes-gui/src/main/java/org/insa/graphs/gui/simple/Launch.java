@@ -56,10 +56,8 @@ public class Launch {
     public static void main(String[] args) throws Exception {
 
         // visit these directory to see the list of available files on commetud.
-        final String mapINSA =
-                "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
-        final String pathName =
-                "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31insa_rangueil_r2.path";
+        final String mapINSA = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
+        final String pathName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31insa_rangueil_r2.path";
         final String mapMidi = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/midi-pyrenees.mapgr" ;
         final String mapTLS = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/toulouse.mapgr" ;
         final String mapMad = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/madagascar.mapgr" ;
@@ -67,37 +65,70 @@ public class Launch {
 
 
 
-        //test 1 dijkstra mode voiture en distance toulouse
-        final Graph graph;
-        int mode = 2 ;
-        String map = mapTLS ;
+        //test 1 mode voiture en distance et en temps toulouse
+
+        final Graph graph1;
+        int mode1 = 1 ;
+        String map1 = mapTLS ;
         //String map = mapBord ;
         try (final GraphReader reader = new BinaryGraphReader(new DataInputStream(
-                new BufferedInputStream(new FileInputStream(map))))) {
-            graph = reader.read();
+                new BufferedInputStream(new FileInputStream(map1))))) {
+            graph1 = reader.read();
         }
         final Drawing drawing = createDrawing();
-        drawing.drawGraph(graph) ;
+        drawing.drawGraph(graph1) ;
 
 
-        Path pathB, pathD, pathA ;
-        ShortestPathData data ;
+        Path pathB1, pathD1, pathA1 ;
+        ShortestPathData data1 ;
         final ArcInspectorFactory Ainspect = new ArcInspectorFactory() ;
-        data = new ShortestPathData(graph, graph.get(5889), graph.get(5660), Ainspect.getAllFilters().get(mode)) ;
-        //data = new ShortestPathData(graph, graph.get(3067), graph.get(3625), Ainspect.getAllFilters().get(mode)) ;
-        DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(data) ;
-        pathD = dijkstra.run().getPath() ;
-        drawing.drawPath(pathD,Color.cyan) ;
-        BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data) ;
-        pathB = bellman.run().getPath() ;
-        drawing.drawPath(pathB, Color.green) ;
-        AStarAlgorithm aStar = new AStarAlgorithm(data) ;
-        pathA = aStar.run().getPath() ;
-        drawing.drawPath(pathA, Color.yellow) ;
+        data1 = new ShortestPathData(graph1, graph1.get(5889), graph1.get(5660), Ainspect.getAllFilters().get(mode1)) ;
+    
+        DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(data1) ;
+        pathD1 = dijkstra.run().getPath() ;
+        drawing.drawPath(pathD1,Color.cyan) ;
+        BellmanFordAlgorithm bellman = new BellmanFordAlgorithm(data1) ;
+        pathB1 = bellman.run().getPath() ;
+        drawing.drawPath(pathB1, Color.green) ;
+        AStarAlgorithm aStar = new AStarAlgorithm(data1) ;
+        pathA1 = aStar.run().getPath() ;
+        drawing.drawPath(pathA1, Color.red) ;
         System.out.println("test Bellman (1) Dijkstra (2)\n") ;
-        test(mode, pathB, pathD) ;
+        test(mode1, pathB1, pathD1) ;
         System.out.println("test Dijkstra (1) AStar (2)\n") ;
-        test(mode, pathD, pathA) ;
+        test(mode1, pathD1, pathA1) ;
+
+        //test 2 chemin nul (origine = destination)
+
+        final Graph graph2;
+        int mode2 = 0 ;
+        String map2 = mapTLS ;
+        //String map = mapBord ;
+        try (final GraphReader reader = new BinaryGraphReader(new DataInputStream(
+                new BufferedInputStream(new FileInputStream(map2))))) {
+            graph2 = reader.read();
+        }
+        final Drawing drawing2 = createDrawing();
+        drawing2.drawGraph(graph2) ;
+        
+        Path pathB2, pathD2, pathA2 ;
+        ShortestPathData data2 ;
+        data2 = new ShortestPathData(graph2, graph2.get(4080),graph2.get(4080), Ainspect.getAllFilters().get(mode2)) ;
+        
+        DijkstraAlgorithm dijkstra2 = new DijkstraAlgorithm(data2) ;
+        pathD2 = dijkstra2.run().getPath() ;
+        drawing.drawPath(pathD2,Color.cyan) ;
+        BellmanFordAlgorithm bellman2 = new BellmanFordAlgorithm(data2) ;
+        pathB2 = bellman2.run().getPath() ;
+        drawing.drawPath(pathB2, Color.green) ;
+        AStarAlgorithm aStar2 = new AStarAlgorithm(data2) ;
+        pathA2 = aStar2.run().getPath() ;
+        drawing.drawPath(pathA2, Color.yellow) ;
+        System.out.println("test Bellman (1) Dijkstra (2)\n") ;
+        test(mode2, pathB2, pathD2) ;
+        System.out.println("test Dijkstra (1) AStar (2)\n") ;
+        test(mode2, pathD2, pathA2) ; 
+
     }
 
     static void test(int mode, Path path1, Path path2) {
