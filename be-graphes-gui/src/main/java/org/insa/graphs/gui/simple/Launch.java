@@ -66,20 +66,20 @@ public class Launch {
         exemple(1,mapTLS,5889,5660,true,true) ;
 
         //test 2 chemin nul (origine = destination)
-        //System.out.println("----TEST 2 : chemin nul----\n") ;
-        //exemple(0,mapTLS,4080,4080,false,false) ;
+        System.out.println("----TEST 2 : chemin nul----\n") ;
+        exemple(0,mapTLS,4080,4080,false,false) ;
 
         //test 3 chemin inexistant (traverse la mer)
-        //System.out.println("----TEST 3 : chemin inexistant----\n") ;
-        //exemple(0,mapNZ,223107,245641,false,false) ;
+        System.out.println("----TEST 3 : chemin inexistant----\n") ;
+        exemple(0,mapNZ,223107,245641,false,false) ;
 
         //test 4 mode piéton
         System.out.println("----TEST 4 : mode piéton----\n") ;
-        exemple(1,mapBord,11328,11414,true,true) ;
+        exemple(3,mapBord,11328,11414,true,true) ;
 
         //test 5 chemin long en mode temps voiture
         System.out.println("----TEST 5 : chemin long en mode temps voiture----\n") ;
-        exemple(1,mapMidi,194784,432853,false,true) ;
+        exemple(2,mapMidi,194784,432853,false,true) ;
 
     }
 
