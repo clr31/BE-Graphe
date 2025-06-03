@@ -15,8 +15,11 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
     protected Label[] labels;
 
+    private int nbSommetsVisit ;
+
     public DijkstraAlgorithm(ShortestPathData data) {
         super(data);
+        this.nbSommetsVisit = 0 ;
     }
 
     @Override
@@ -69,6 +72,7 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
 
                 if(Double.isInfinite(oldCost) && Double.isFinite(newCost)) {
                     notifyNodeReached(a.getDestination()) ;
+                    this.nbSommetsVisit++ ;
                 }
                 if(oldCost > newCost) {
 
@@ -106,5 +110,9 @@ public class DijkstraAlgorithm extends ShortestPathAlgorithm {
         // when the algorithm terminates, return the solution that has been found
         return solution;
     }
+
+    public int getNbSommetsVisit(){
+        return this.nbSommetsVisit ;
+    } 
 
 }

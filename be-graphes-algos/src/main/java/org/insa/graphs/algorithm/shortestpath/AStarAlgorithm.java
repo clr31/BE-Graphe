@@ -14,8 +14,11 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
 
     protected LabelStar[] labels ; 
 
+    private int nbSommetsVisit ;
+
     public AStarAlgorithm(ShortestPathData data) {
         super(data);
+        this.nbSommetsVisit = 0 ;
     }
 
     @Override
@@ -70,6 +73,7 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
 
                 if(Double.isInfinite(oldCost) && Double.isFinite(newCost)) {
                     notifyNodeReached(a.getDestination()) ;
+                    this.nbSommetsVisit++ ;
                 }
                 if(oldCost > newCost) {
 
@@ -107,5 +111,9 @@ public class AStarAlgorithm extends DijkstraAlgorithm {
         // when the algorithm terminates, return the solution that has been found
         return solution;
     }
+
+    public int getNbSommetsVisit(){
+        return this.nbSommetsVisit ;
+    } 
 
 }

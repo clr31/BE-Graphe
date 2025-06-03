@@ -56,39 +56,34 @@ public class Launch {
     public static void main(String[] args) throws Exception {
 
         // visit these directory to see the list of available files on commetud.
-        final String mapINSA = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/insa.mapgr";
-        final String pathName = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Paths/path_fr31insa_rangueil_r2.path";
         final String mapMidi = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/midi-pyrenees.mapgr" ;
         final String mapTLS = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/toulouse.mapgr" ;
-        final String mapMad = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/madagascar.mapgr" ;
         final String mapBord = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/bordeaux.mapgr" ;
         final String mapNZ = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/new-zealand.mapgr" ;
-        final String mapFR = "/mnt/commetud/3eme Annee MIC/Graphes-et-Algorithmes/Maps/france.mapgr" ;
-
 
         //test 1 mode voiture en distance et en temps toulouse
         System.out.println("----TEST 1 : mode voiture en distance----\n") ;
-        exemple(1,mapTLS,5889,5660,true) ;
+        exemple(1,mapTLS,5889,5660,true,true) ;
 
         //test 2 chemin nul (origine = destination)
         System.out.println("----TEST 2 : chemin nul----\n") ;
-        exemple(0,mapTLS,4080,4080,true) ;
+        exemple(0,mapTLS,4080,4080,false,false) ;
 
         //test 3 chemin inexistant (traverse la mer)
         System.out.println("----TEST 3 : chemin inexistant----\n") ;
-        exemple(0,mapNZ,223107,245641,false) ;
+        exemple(0,mapNZ,223107,245641,false,false) ;
 
         //test 4 mode piéton
         System.out.println("----TEST 4 : mode piéton----\n") ;
-        exemple(0,mapBord,11328,11414,true) ;
+        exemple(0,mapBord,11328,11414,true,false) ;
 
         //test 5 chemin long en mode temps voiture
         System.out.println("----TEST 5 : chemin long en mode temps voiture----\n") ;
-        exemple(0,mapFR,11328,11414,false) ;
+        exemple(0,mapMidi,194784,432853,false,true) ;
 
     }
 
-    static void exemple(int mode, String map, int origin, int destination, boolean bell) throws Exception {
+    static void exemple(int mode, String map, int origin, int destination, boolean bell, boolean mesure) throws Exception {
         final Graph graph ;
         try (final GraphReader reader = new BinaryGraphReader(new DataInputStream(
                 new BufferedInputStream(new FileInputStream(map))))) {
@@ -101,12 +96,29 @@ public class Launch {
         ShortestPathData data ;
         final ArcInspectorFactory Ainspect = new ArcInspectorFactory() ;
         data = new ShortestPathData(graph, graph.get(origin), graph.get(destination), Ainspect.getAllFilters().get(mode)) ;
-    
+        
         DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(data) ;
-        pathD = dijkstra.run().getPath() ;
-
         AStarAlgorithm aStar = new AStarAlgorithm(data) ;
-        pathA = aStar.run().getPath() ;
+
+        if(mesure){
+            long debM = System.currentTimeMillis() ;
+            pathD = dijkstra.run().getPath() ;
+            long finM = System.currentTimeMillis() ;
+            long tempsExe = finM - debM ;
+            System.out.println("Temps d'exécution Dijkstra : " + tempsExe + " ms") ;
+            System.out.println("Nombre de noeuds atteints Dijkstra : " + dijkstra.getNbSommetsVisit()) ;
+
+            debM = System.currentTimeMillis() ;
+            pathA = aStar.run().getPath() ;
+            finM = System.currentTimeMillis() ;
+            tempsExe = finM - debM ;
+            System.out.println("Temps d'exécution A* : " + tempsExe + " ms") ;
+            System.out.println("Nombre de noeuds atteints A* : " + aStar.getNbSommetsVisit()) ;
+        } 
+        else{
+            pathD = dijkstra.run().getPath() ;
+            pathA = aStar.run().getPath() ;
+        } 
         
         if(pathD==null){
             System.out.println("Aucun chemin trouvé, je passe au test suivant\n") ;
